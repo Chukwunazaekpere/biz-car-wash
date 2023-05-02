@@ -8,6 +8,11 @@ import dbConnect from "./config/dbConnect";
 
 const PORT = process.env.PORT;
 carWashServer.listen(PORT, async() => {
-    await dbConnect();
-    console.log(`\n\t Server started on port: ${PORT}`);
+    try {
+        await dbConnect();
+        console.log(`\n\t Server started on port: ${PORT}`);
+    } catch (error) {
+        console.log(`\n\t Server did not start on port: ${PORT}`);
+        
+    }
 });

@@ -18,6 +18,11 @@ const server_1 = __importDefault(require("./server"));
 const dbConnect_1 = __importDefault(require("./config/dbConnect"));
 const PORT = process.env.PORT;
 server_1.default.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, dbConnect_1.default)();
-    console.log(`\n\t Server started on port: ${PORT}`);
+    try {
+        yield (0, dbConnect_1.default)();
+        console.log(`\n\t Server started on port: ${PORT}`);
+    }
+    catch (error) {
+        console.log(`\n\t Server did not start on port: ${PORT}`);
+    }
 }));

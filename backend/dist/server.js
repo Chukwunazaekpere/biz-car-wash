@@ -15,5 +15,5 @@ carWashServer.use('/uploads', express_1.default.static(path_1.default.join(__dir
 carWashServer.use((0, cors_1.default)());
 carWashServer.use(express_1.default.static("files"));
 // Routes
-carWashServer.use("/car-wash/api", routes_1.default);
+carWashServer.use("/biz-car-wash/api", routes_1.default);
 exports.default = carWashServer;

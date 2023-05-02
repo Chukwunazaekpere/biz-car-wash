@@ -23,7 +23,6 @@ const DB_URL = process.env.NODE_ENV === "development" ? process.env.LOCAL_DB_URL
 exports.MAXIMUM_DAILY_RECORD = process.env.MAXIMUM_DAILY_RECORD;
 const dbConnect = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // console.log("\n\t todaysDate: ", todaysDate())
         console.log(`\n\t Initiating database connection: ${DB_URL}`);
         yield mongoose_1.default.connect(DB_URL);
         // await Promise.all([]);

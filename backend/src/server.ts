@@ -15,8 +15,6 @@ carWashServer.use(cors());
 carWashServer.use(express.static("files"));
 
 // Routes
-carWashServer.use("/car-wash/api", carWashRouters);
-
-
+carWashServer.use("/biz-car-wash/api", carWashRouters);
 export default carWashServer;
 

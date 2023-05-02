@@ -7,7 +7,7 @@ import { logUserActivity } from "../../helpers/userActivities";
 const { Users } = userModels;
 
 const LoginController = async(req: Request, res: Response) => {
-    // console.log("\n\t LoginController: ", req.body);
+    console.log("\n\t LoginController: ", req.body);
     const { email, password } = req.body;
     let statusCode = 400
     // console.log("\n\t Request-body-user-all: ", await Users.find())

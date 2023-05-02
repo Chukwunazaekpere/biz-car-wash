@@ -19,7 +19,7 @@ const date_fran_1 = require("date-fran");
 const userActivities_1 = require("../../helpers/userActivities");
 const { Users } = models_1.default;
 const LoginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // console.log("\n\t LoginController: ", req.body);
+    console.log("\n\t LoginController: ", req.body);
     const { email, password } = req.body;
     let statusCode = 400;
     // console.log("\n\t Request-body-user-all: ", await Users.find())
