@@ -29,7 +29,7 @@ const UpdateBookingController = (req, res) => __awaiter(void 0, void 0, void 0, 
         if (bookingDetails) {
             statusCode = 200;
             yield Promise.all([
-                Bookings.findByIdAndUpdate(Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), updatedBy: req.user._id, stringDate: (0, date_fran_1.todaysDate)().toDateString() })),
+                Bookings.findByIdAndUpdate(Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), updatedBy: req._id, stringDate: (0, date_fran_1.todaysDate)().toDateString() })),
                 (0, userActivities_1.logUserActivity)(adminUser, `Booking details was successfully updated`, req)
             ]);
             return res.status(statusCode).json({

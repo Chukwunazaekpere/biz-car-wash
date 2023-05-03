@@ -1,12 +1,13 @@
 //imports
 import express, { Application } from "express";
 import cors from "cors";
-
+import cookieParser from "cookie-parser";
 import path from "path";
 import carWashRouters from "./routes";
 const carWashServer: Application = express(); //carWashServer initialization;
 
-
+carWashServer.enable("trust proxy");
+carWashServer.use(cookieParser());
 
 // middlewares  
 carWashServer.use(express.json());

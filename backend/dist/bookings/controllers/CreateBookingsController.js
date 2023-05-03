@@ -15,21 +15,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const date_fran_1 = require("date-fran");
 const models_1 = __importDefault(require("../models"));
 const userActivities_1 = require("../../helpers/userActivities");
+const Bookings_1 = require("../models/Bookings");
+const Customers_1 = __importDefault(require("../../users/models/Customers"));
+const Employees_1 = __importDefault(require("../../users/models/Employees"));
 const { Bookings } = models_1.default;
 const CreateBookingController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("\n\t CreateBookingController...", req.body);
     const adminUser = req.user;
     let statusCode = 403;
     try {
+        const { paymentMethod, date, time } = req.body;
         let errorMessage = `Both password and confirm-password must be same`;
         statusCode = 400;
-        const bookingExists = yield Bookings.findOne({});
+        const user = (yield Customers_1.default.findById(req._id)) || (yield Employees_1.default.findById(req._id)) || (yield Customers_1.default.findById(req._id));
         errorMessage = "Booking already exists.";
-        if (!bookingExists) {
+        if (user) {
             statusCode = 0;
             yield Promise.all([
-                Bookings.create(Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), dateCreated: (0, date_fran_1.todaysDate)(), createdBy: req.user._id, stringDate: (0, date_fran_1.todaysDate)().toDateString() })),
-                (0, userActivities_1.logUserActivity)(adminUser, `Registered a new booking.`, req)
+                Bookings.create(Object.assign(Object.assign({}, req.body), { customerId: user._id, payment: req.body['paymentMethod'], dateUpdated: (0, date_fran_1.todaysDate)(), dateCreated: (0, date_fran_1.todaysDate)(), createdBy: req._id, date: (0, date_fran_1.givenDateAndCurrentTime)(date), status: Bookings_1.bookingStatus.Pending, stringDate: (0, date_fran_1.todaysDate)().toDateString() })),
+                (0, userActivities_1.logUserActivity)(user, `Registered a new booking.`, req)
             ]);
             return res.status(201).json({
                 status: "Success",

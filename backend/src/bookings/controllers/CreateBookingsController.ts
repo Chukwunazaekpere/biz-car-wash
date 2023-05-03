@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
+import { ObjectId} from "mongoose";
 
-
-import { todaysDate } from "date-fran";
+import { givenDateAndCurrentTime, todaysDate } from "date-fran";
 import bookingsModel from "../models";
 import { logUserActivity } from "../../helpers/userActivities";
+import { bookingStatus } from "../models/Bookings";
+import Customers from "../../users/models/Customers";
+import Employees from "../../users/models/Employees";
+import User from "../../users/models/Users";
 const { Bookings } = bookingsModel;
 
 
@@ -12,21 +16,26 @@ const CreateBookingController = async(req: Request, res: Response) => {
     const adminUser = req.user;
     let statusCode = 403;
     try {
+        const { paymentMethod, date, time } = req.body;
         let errorMessage = `Both password and confirm-password must be same`;
         statusCode = 400;
-        const bookingExists = await Bookings.findOne({});
+        const user = await Customers.findById(req._id) || await Employees.findById(req._id) || await Customers.findById(req._id);
         errorMessage = "Booking already exists."
-        if (!bookingExists) {
+        if (user) {
             statusCode = 0;
             await Promise.all([
                 Bookings.create({
                     ...req.body,
+                    customerId: user._id,
+                    payment: req.body['paymentMethod'],
                     dateUpdated: todaysDate(),
                     dateCreated: todaysDate(),
-                    createdBy: req.user._id,
+                    createdBy: req._id,
+                    date: givenDateAndCurrentTime(date),
+                    status: bookingStatus.Pending,
                     stringDate: todaysDate().toDateString(),
                 }),
-                logUserActivity(adminUser, `Registered a new booking.`, req)
+                logUserActivity(user, `Registered a new booking.`, req)
             ]);
             return res.status(201).json({
                 status: "Success",

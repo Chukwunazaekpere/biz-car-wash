@@ -1,6 +1,3 @@
-dotenv.config({path: process.env.ENV_PATH as string});
-import dotenv from "dotenv";
-
 import carWashServer from "./server";
 import dbConnect from "./config/dbConnect";
 

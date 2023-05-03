@@ -63,7 +63,7 @@ const BookingsSchema = new mongoose_1.Schema({
         required: true
     },
     status: {
-        type: Boolean,
+        type: String,
         required: true,
         enum: bookingStatus
     }

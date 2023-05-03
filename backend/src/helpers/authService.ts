@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 dotenv.config({path: "./backend/src/config/.env"});
 
 import usersModels from "../users/models";
-const { Users } = usersModels;
+const { Customers, Employees, Admins } = usersModels;
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -18,27 +18,26 @@ export const authenticate = async(req: Request, res: Response, next: NextFunctio
         let accessToken;
         //check if token was sent along with the request and also that the user 
         // used the right authorization header
-        if (
-            req.headers.authorization &&
-            req.headers.authorization.startsWith("Bearer")
-        ) {
+        if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
             accessToken = req.headers.authorization.split(" ")[1];
-        } else if (req.cookies.accessToken) {
+            console.log("\n\t Server-accessToken: ", accessToken);
+            console.log("\n\t Server-req.cookies.accessToken: ", req.cookies);
+        } else if (req.cookies && req.cookies.accessToken) {
             accessToken = req.cookies.accessToken;
         }
         //check if the access token actually exist
         if(!accessToken) return `Acesss denied, No authorization token`;
         //decode the acesss token
         const decodedToken = jwt.verify(accessToken, JWT_SECRET) as jwt.JwtPayload;
-        // console.log("\n\t Server-decodedToken: ", decodedToken);
-        const user = await Users.findById(decodedToken.user.id).select("-password");
+        console.log("\n\t Server-decodedToken: ", decodedToken);
+        const user = await Admins.findById(decodedToken.user.id) || await Employees.findById(decodedToken.user.id) || await Customers.findById(decodedToken.user.id);
+        console.log("\n\t Server-user: ", user);
         if(user){
             // Check license details
-            // console.log("\n\t Server-licenseDetails: ", licenseDetails);
-            (req as any).user = user;
-            res.locals.user = user;
-    
-            next();
+            // console.log("\n\t Server-user.name: ", user.name);
+            req._id = String(user._id);
+            res.locals.user = decodedToken.user.id;
+            return next();
         };
         throw new Error("Access denied.");
     } catch (error: any) {
@@ -68,12 +67,12 @@ export const isLoggedIn = async (req: Request, res: Response, next: NextFunction
             //decode the acesss token
             const decodedToken = jwt.verify(accessToken, JWT_SECRET) as jwt.JwtPayload;
             //check if user exist just to be sure the user had not been deleted
-            const user = await Users.findById(decodedToken.user.id);
+            const user = await Admins.findById(decodedToken.user.id) || await Employees.findById(decodedToken.user.id) || await Customers.findById(decodedToken.user.id);
             if(user){
-                // console.log("\n\t found Users in isLoggedIn: ",);
-                (req as any).user._id = user._id
-                req.user.userType = user.userType
+                // (req.user as any)._id = decodedToken.user.id;
+                // req.user.userType = user.userType
                 // console.log("\n\t Users in isLoggedIn...", req.cookies);
+                req._id = String(user._id);
                 return next();
             };
             throw new Error("Unrecognised user.")

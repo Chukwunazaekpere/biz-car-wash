@@ -9,7 +9,7 @@ const AllBookingsController = async(req: Request, res: Response) => {
     // console.log("\n\t AllBookingsController...", req.body)
     try {
 
-        const bookings = await Bookings.find().select("-__v").select("-companyId").select("-password").select("-dateUpdated").select("-updatedBy");
+        const bookings = await Bookings.find().sort({dateCreated: "desc"}).select("-__v").select("-customerId").select("-createdBy");
         const actualData = [] as any[];
         const utils = {}as any;
         for(let user of bookings){

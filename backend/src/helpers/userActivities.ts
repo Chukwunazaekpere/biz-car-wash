@@ -14,8 +14,7 @@ export const logUserActivity = async(userData: any, operation: string, req: Requ
         const savingname = `${firstname} ${lastname}`
         if(user){
             await UserLog.create({
-                name: savingname,
-                userFullname: `${(firstname).concat(" ", lastname)}`,
+                userFullname: savingname,
                 userType: userType,
                 operation,
                 stringDate: todaysDate().toDateString(),

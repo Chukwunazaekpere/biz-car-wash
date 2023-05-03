@@ -35,7 +35,7 @@ const UpdateUserController = async(req: Request, res: Response) => {
                         password: hashedPassword, 
                         lastSeen: todaysDate(), 
                         name: firstname.concat(" ", lastname), 
-                        updatedBy: req.user._id, 
+                        updatedBy: req._id, 
                     })
                     :
                     originalUrl.includes("admin") ?
@@ -45,7 +45,7 @@ const UpdateUserController = async(req: Request, res: Response) => {
                         password: hashedPassword, 
                         lastSeen: todaysDate(), 
                         name: firstname.concat(" ", lastname), 
-                        updatedBy: req.user._id, 
+                        updatedBy: req._id, 
                     })
                     :
                     Customers.findByIdAndUpdate(usersId, {
@@ -54,7 +54,7 @@ const UpdateUserController = async(req: Request, res: Response) => {
                         password: hashedPassword, 
                         lastSeen: todaysDate(), 
                         name: firstname.concat(" ", lastname), 
-                        updatedBy: req.user._id, 
+                        updatedBy: req._id, 
                     }),
                     logUserActivity(adminUser, `Registered a new user: ${firstname} ${lastname}`, req)
                 ]);

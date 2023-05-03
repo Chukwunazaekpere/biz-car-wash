@@ -33,5 +33,13 @@ Employeeschema.statics.getEmployeesId = function (id) {
         }
     });
 };
+// Employeeschema.statics.getUserDetails = async function(id:any){
+//     try {
+//         const details = await this.findById(id)
+//         return details;
+//     } catch (error) {
+//         return null
+//     }
+// }
 const Employees = mongoose_1.default.model("Employees", Employeeschema);
 exports.default = Employees;

@@ -28,7 +28,7 @@ const LoginController = (req, res) => __awaiter(void 0, void 0, void 0, function
         let errorMessage = "Invalid user credentials";
         if (user) {
             const passwordPass = yield (0, passwordManipulation_1.decryptPassword)(password, user.password);
-            let statusCode = 403;
+            statusCode = 403;
             if (passwordPass) {
                 const payLoad = {
                     user: {
@@ -62,6 +62,7 @@ const LoginController = (req, res) => __awaiter(void 0, void 0, void 0, function
             }
         }
         ;
+        throw new Error(errorMessage);
     }
     catch (error) {
         console.log("\n\t Login error: ", error.message);

@@ -7,8 +7,8 @@ declare module "express-serve-static-core" {
                 firstname: string
                 lastname: string
                 userType: string
-                _id: string,
             },
+            _id: string,
             company: {
                 companysEmail: string
                 hotel_logo_url: string

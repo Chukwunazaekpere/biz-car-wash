@@ -35,7 +35,7 @@ const UserLogSchema = new mongoose_1.default.Schema({
     },
     userType: {
         type: String,
-        required: true,
+        required: false,
     },
     operation: {
         type: String,

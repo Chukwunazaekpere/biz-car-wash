@@ -39,10 +39,10 @@ const mongoose_1 = __importStar(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: "./backend/src/config/.env" });
 ;
-const Custoomerschema = new mongoose_1.Schema({
+const Customerschema = new mongoose_1.Schema({
     vehicle: {
         type: String,
-        required: true,
+        required: false,
     },
     city: {
         type: String,
@@ -51,16 +51,24 @@ const Custoomerschema = new mongoose_1.Schema({
         type: String,
     },
 });
-Custoomerschema.statics.getCustoomersId = function (id) {
+Customerschema.statics.getCustomersId = function (id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const CustoomersId = yield this.findById(id);
-            return CustoomersId.email;
+            const CustomersId = yield this.findById(id);
+            return CustomersId.email;
         }
         catch (error) {
             return undefined;
         }
     });
 };
-const Custoomers = mongoose_1.default.model("Custoomers", Custoomerschema);
-exports.default = Custoomers;
+// Customerschema.statics.getUserDetails = async function(id:any){
+//     try {
+//         const details = await this.findById(id)
+//         return details;
+//     } catch (error) {
+//         return null
+//     }
+// }
+const Customers = mongoose_1.default.model("Customers", Customerschema);
+exports.default = Customers;

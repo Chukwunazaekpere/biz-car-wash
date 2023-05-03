@@ -16,7 +16,7 @@ const LoginController = async(req: Request, res: Response) => {
         let errorMessage = "Invalid user credentials"
         if (user) {
             const passwordPass = await decryptPassword(password, user.password);
-            let statusCode = 403;
+            statusCode = 403;
             if (passwordPass) {
                 const payLoad = {
                     user: {
@@ -49,6 +49,7 @@ const LoginController = async(req: Request, res: Response) => {
                 });
             }
         };  
+        throw new Error(errorMessage);
     }catch (error:any) {
         console.log("\n\t Login error: ", error.message);
         return res.status(statusCode).json({

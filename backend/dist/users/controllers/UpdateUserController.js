@@ -39,12 +39,12 @@ const UpdateUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
                 statusCode = 0;
                 yield Promise.all([
                     originalUrl.includes("/admin/employee") ?
-                        Employees.findByIdAndUpdate(usersId, Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), password: hashedPassword, lastSeen: (0, date_fran_1.todaysDate)(), name: firstname.concat(" ", lastname), updatedBy: req.user._id }))
+                        Employees.findByIdAndUpdate(usersId, Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), password: hashedPassword, lastSeen: (0, date_fran_1.todaysDate)(), name: firstname.concat(" ", lastname), updatedBy: req._id }))
                         :
                             originalUrl.includes("admin") ?
-                                Admins.findByIdAndUpdate(usersId, Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), password: hashedPassword, lastSeen: (0, date_fran_1.todaysDate)(), name: firstname.concat(" ", lastname), updatedBy: req.user._id }))
+                                Admins.findByIdAndUpdate(usersId, Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), password: hashedPassword, lastSeen: (0, date_fran_1.todaysDate)(), name: firstname.concat(" ", lastname), updatedBy: req._id }))
                                 :
-                                    Customers.findByIdAndUpdate(usersId, Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), password: hashedPassword, lastSeen: (0, date_fran_1.todaysDate)(), name: firstname.concat(" ", lastname), updatedBy: req.user._id })),
+                                    Customers.findByIdAndUpdate(usersId, Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), password: hashedPassword, lastSeen: (0, date_fran_1.todaysDate)(), name: firstname.concat(" ", lastname), updatedBy: req._id })),
                     (0, userActivities_1.logUserActivity)(adminUser, `Registered a new user: ${firstname} ${lastname}`, req)
                 ]);
                 return res.status(201).json({

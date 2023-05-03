@@ -4,21 +4,22 @@ import { AdminSchemaInterface } from "./Users";
 dotenv.config({path: "./backend/src/config/.env"})
 
 
-interface CustoomersSchemaInterface extends AdminSchemaInterface {
+interface CustomersSchemaInterface extends AdminSchemaInterface {
     address: string
     city: string
     vehicle: string
 }
 
 
-interface CustoomersMethods extends Model<CustoomersSchemaInterface> {
-    getCustoomersId: (id: string) => Promise<string | undefined>
+interface CustomersMethods extends Model<CustomersSchemaInterface> {
+    getCustomersId: (id: string) => Promise<string | undefined>
+    // getUserDetails: (id: string) => Promise<any | undefined>
 };
 
-const Custoomerschema = new Schema<CustoomersSchemaInterface>({
+const Customerschema = new Schema<CustomersSchemaInterface>({
     vehicle: {
         type: String,
-        required: true,
+        required: false,
     },
     city: {
         type: String,
@@ -28,14 +29,23 @@ const Custoomerschema = new Schema<CustoomersSchemaInterface>({
     },
 });
 
-Custoomerschema.statics.getCustoomersId = async function(id: string): Promise<string | undefined> { 
+Customerschema.statics.getCustomersId = async function(id: string): Promise<string | undefined> { 
     try {
-        const CustoomersId = await this.findById(id);
-        return CustoomersId.email;
+        const CustomersId = await this.findById(id);
+        return CustomersId.email;
     } catch (error) {
         return undefined
     }
-}
+};
 
-const Custoomers = mongoose.model<CustoomersSchemaInterface, CustoomersMethods>("Custoomers", Custoomerschema);
-export default Custoomers;
+// Customerschema.statics.getUserDetails = async function(id:any){
+//     try {
+//         const details = await this.findById(id)
+//         return details;
+//     } catch (error) {
+//         return null
+//     }
+// }
+
+const Customers = mongoose.model<CustomersSchemaInterface, CustomersMethods>("Customers", Customerschema);
+export default Customers;

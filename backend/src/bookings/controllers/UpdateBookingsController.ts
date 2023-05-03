@@ -23,7 +23,7 @@ const UpdateBookingController = async(req: Request, res: Response) => {
                 Bookings.findByIdAndUpdate({
                     ...req.body,
                     dateUpdated: todaysDate(),
-                    updatedBy: req.user._id,
+                    updatedBy: req._id,
                     stringDate: todaysDate().toDateString(),
                 }),
                 logUserActivity(adminUser, `Booking details was successfully updated`, req)

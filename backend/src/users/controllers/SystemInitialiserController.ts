@@ -1,5 +1,5 @@
 import { todaysDate } from "date-fran";
-import Users from "../models/Users";
+import Users, { userTypes } from "../models/Users";
 const Admins = Users;
 import { logUserActivity } from "../../helpers/userActivities";
 import { Request, Response } from "express"
@@ -24,7 +24,7 @@ const SystemInitialiserController = async(req: Request, res: Response) => {
                 lastname: initializer.lastname,
                 email: initializer.email,
             }),
-            hashUserPassword(process.env.COMPANY_PASSWORD),
+            hashUserPassword(process.env.COMPANY_DEVELOPER_PASSWORD),
         ]);
         // console.log("\n\t Creating Defaults-2...", defaultUser);
         if (!defaultUser) {
@@ -34,7 +34,7 @@ const SystemInitialiserController = async(req: Request, res: Response) => {
                     username: initializer.username,
                     dateUpdated: todaysDate(),
                     password: hashedPassword,
-                    // userType: initializer.userType,
+                    userType: userTypes.Admin,
                     phone: initializer.phone,
                     dateCreated: todaysDate(),
                     lastSeen: todaysDate(),
@@ -44,10 +44,9 @@ const SystemInitialiserController = async(req: Request, res: Response) => {
                 logUserActivity(initializer, `System initialization`, req)
             ]);
             return true;
-        }
+        };
         throw new Error("Users exist.");
-    }
-    catch (error: any) {
+    }catch (error: any) {
         console.log(error);
         return error.message;
     }

@@ -19,7 +19,7 @@ const { Customers } = models_2.default;
 const AllBookingsController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // console.log("\n\t AllBookingsController...", req.body)
     try {
-        const bookings = yield Bookings.find().select("-__v").select("-companyId").select("-password").select("-dateUpdated").select("-updatedBy");
+        const bookings = yield Bookings.find().sort({ dateCreated: "desc" }).select("-__v").select("-customerId").select("-createdBy");
         const actualData = [];
         const utils = {};
         for (let user of bookings) {

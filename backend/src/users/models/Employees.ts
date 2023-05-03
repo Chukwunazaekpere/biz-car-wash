@@ -11,6 +11,8 @@ interface EmployeesSchemaInterface extends AdminSchemaInterface {
 
 interface EmployeesMethods extends Model<EmployeesSchemaInterface> {
     getEmployeesId: (id: string) => Promise<string | undefined>
+    // getUserDetails: (id: string) => Promise<any | undefined>
+
 };
 
 const Employeeschema = new mongoose.Schema<EmployeesSchemaInterface>({
@@ -29,5 +31,13 @@ Employeeschema.statics.getEmployeesId = async function(id: string): Promise<stri
     }
 }
 
+// Employeeschema.statics.getUserDetails = async function(id:any){
+//     try {
+//         const details = await this.findById(id)
+//         return details;
+//     } catch (error) {
+//         return null
+//     }
+// }
 const Employees = mongoose.model<EmployeesSchemaInterface, EmployeesMethods>("Employees", Employeeschema);
 export default Employees;

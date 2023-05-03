@@ -14,15 +14,16 @@ export interface AdminSchemaInterface {
     userType: string
     username: string
     password: string
+    // getUserDetails: (id: any) => Promise<any | undefined>
 }
 export enum userTypes {
-    "Admin",
-    "Customer",
-    "Employee"
+    "Admin" = "Admin",
+    "Customer" = "Customer",
+    "Employee" = "Employee"
 }
 
 interface AdminMethods extends Model<AdminSchemaInterface> {
-    // getAdminId: (id: string) => Promise<string | undefined>
+    getUserDetails: (id: any) => Promise<any | undefined>
 };
 
 const Adminchema = new Schema<AdminSchemaInterface>({
@@ -70,6 +71,13 @@ const Adminchema = new Schema<AdminSchemaInterface>({
         required: true
     }
 });
-
+Adminchema.statics.getUserDetails = async function(id:any){
+    try {
+        const details = await this.findById(id)
+        return details;
+    } catch (error) {
+        return null
+    }
+}
 const User = mongoose.model<AdminSchemaInterface, AdminMethods>("User", Adminchema);
 export default User;

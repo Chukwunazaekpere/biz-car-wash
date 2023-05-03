@@ -2,7 +2,7 @@ import mongoose, { ObjectId, Schema } from "mongoose"
 interface BookingsInterface {
     customerId: ObjectId
     date: Date
-    status: boolean
+    status: string
     stringDate: string
     payment: string
     serviceType: string
@@ -47,7 +47,7 @@ const BookingsSchema =  new Schema<BookingsInterface>({
         required: true
     },
     status: {
-        type: Boolean,
+        type: String,
         required: true,
         enum: bookingStatus
     }

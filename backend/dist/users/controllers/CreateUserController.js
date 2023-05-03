@@ -19,9 +19,9 @@ const Admins = Users;
 const userActivities_1 = require("../../helpers/userActivities");
 const passwordManipulation_1 = require("../../helpers/passwordManipulation");
 const Users_1 = require("../models/Users");
+const accessTokens_1 = require("../../helpers/accessTokens");
 const CreateUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("\n\t CreateUserController...", req.body);
-    const adminUser = req.user;
     let statusCode = 403;
     const originalUrl = req.originalUrl;
     try {
@@ -29,31 +29,52 @@ const CreateUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
         let errorMessage = `Both password and confirm-password must be same`;
         statusCode = 400;
         if (confirmPassword === password) {
+            const name = firstname.concat(" ", lastname);
             const [usersFullname, usernameExists, hashedPassword] = yield Promise.all([
-                Users.findOne({ name: firstname.concat(" ", lastname) }),
-                Users.findOne({ userName: username }),
+                Users.findOne({ name }),
+                Users.findOne({ username }),
                 (0, passwordManipulation_1.hashUserPassword)(password),
             ]);
-            errorMessage = usersFullname ? `A user: ${firstname.concat(" ", lastname)} already exists. Please choose another name` : `The username: ${username} already exists. Please choose another username`;
+            errorMessage = usersFullname ? `A user: ${name} already exists. Please choose another name` : `The username: ${username} already exists. Please choose another username`;
             if (!usersFullname && !usernameExists) {
                 statusCode = 0;
-                yield Promise.all([
-                    originalUrl.includes("admin") && userType.toLowerCase() !== "admin" ?
-                        Employees.create(Object.assign(Object.assign({}, req.body), { userType: Users_1.userTypes.Employee, dateUpdated: (0, date_fran_1.todaysDate)(), password: hashedPassword, dateCreated: (0, date_fran_1.todaysDate)(), lastSeen: (0, date_fran_1.todaysDate)(), name: firstname.concat(" ", lastname), createdBy: req.user._id, stringDate: (0, date_fran_1.todaysDate)().toDateString() }))
-                        :
-                            originalUrl.includes("admin") && userType.toLowerCase() === "admin" ?
-                                Admins.create(Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), userType: Users_1.userTypes.Admin, password: hashedPassword, dateCreated: (0, date_fran_1.todaysDate)(), lastSeen: (0, date_fran_1.todaysDate)(), name: firstname.concat(" ", lastname), createdBy: req.user._id, stringDate: (0, date_fran_1.todaysDate)().toDateString() }))
-                                :
-                                    Customers.create(Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), password: hashedPassword, dateCreated: (0, date_fran_1.todaysDate)(), userType: Users_1.userTypes.Customer, lastSeen: (0, date_fran_1.todaysDate)(), name: firstname.concat(" ", lastname), createdBy: req.user._id, stringDate: (0, date_fran_1.todaysDate)().toDateString() })),
-                    (0, userActivities_1.logUserActivity)(adminUser, `Registered a new user: ${firstname} ${lastname}`, req)
+                const name = firstname.concat(" ", lastname);
+                const user = originalUrl.includes("admin") && userType.toLowerCase() !== "admin" ?
+                    yield Employees.create(Object.assign(Object.assign({}, req.body), { userType: Users_1.userTypes.Employee, dateUpdated: (0, date_fran_1.todaysDate)(), password: hashedPassword, dateCreated: (0, date_fran_1.todaysDate)(), lastSeen: (0, date_fran_1.todaysDate)(), name, stringDate: (0, date_fran_1.todaysDate)().toDateString() }))
+                    :
+                        originalUrl.includes("admin") && userType.toLowerCase() === "admin" ?
+                            yield Admins.create(Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), userType: Users_1.userTypes.Admin, password: hashedPassword, dateCreated: (0, date_fran_1.todaysDate)(), lastSeen: (0, date_fran_1.todaysDate)(), name, stringDate: (0, date_fran_1.todaysDate)().toDateString() }))
+                            :
+                                yield Customers.create(Object.assign(Object.assign({}, req.body), { dateUpdated: (0, date_fran_1.todaysDate)(), password: hashedPassword, dateCreated: (0, date_fran_1.todaysDate)(), userType: Users_1.userTypes.Customer, lastSeen: (0, date_fran_1.todaysDate)(), name, stringDate: (0, date_fran_1.todaysDate)().toDateString() }));
+                const payLoad = {
+                    user: {
+                        id: user._id,
+                    },
+                };
+                const [accessToken, log] = yield Promise.all([
+                    (0, accessTokens_1.generateAccessToken)(payLoad),
+                    (0, userActivities_1.logUserActivity)(Object.assign(Object.assign({}, req.body), { userType: user.userType }), `Registered a new user: ${firstname} ${lastname}`, req)
                 ]);
+                // console.log("\n\t CreateUserController-userDetails...",userDetails);
                 return res.status(201).json({
                     status: "Success",
                     message: `${firstname} ${lastname} was successfully registered.`,
+                    data: {
+                        accessToken,
+                        user: {
+                            // ...user,
+                            name,
+                            _id: user._id,
+                        },
+                    },
                 });
             }
             ;
         }
+        ;
+        // console.log("\n\t CreateUserController-errorMessage...",req.user);
+        // console.log("\n\t CreateUserController-errorMessage...", errorMessage);
+        // console.log("\n\t CreateUserController-errorMessage...",req.user._id);
         throw new Error(errorMessage);
     }
     catch (error) {

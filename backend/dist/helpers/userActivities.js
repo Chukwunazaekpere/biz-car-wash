@@ -25,8 +25,7 @@ const logUserActivity = (userData, operation, req) => __awaiter(void 0, void 0, 
         const savingname = `${firstname} ${lastname}`;
         if (user) {
             yield UserLog.create({
-                name: savingname,
-                userFullname: `${(firstname).concat(" ", lastname)}`,
+                userFullname: savingname,
                 userType: userType,
                 operation,
                 stringDate: (0, date_fran_1.todaysDate)().toDateString(),

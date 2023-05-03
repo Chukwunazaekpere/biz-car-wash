@@ -9,7 +9,7 @@ const usersRouter = (0, express_1.Router)();
 // usersRouter.use(authenticate);
 // usersRouter.use(isLoggedIn);
 usersRouter.get("/", controllers_1.default.AllUsersController);
-usersRouter.post("/new-user", controllers_1.default.CreateUserController);
+usersRouter.post("/register", controllers_1.default.CreateUserController);
 usersRouter.get("/modify-user", controllers_1.default.UpdateUserController);
 usersRouter.get("/remove-user", controllers_1.default.DeleteUserController);
 usersRouter.post("/login", controllers_1.default.LoginController);

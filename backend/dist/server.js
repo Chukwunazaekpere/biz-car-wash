@@ -6,9 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //imports
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const path_1 = __importDefault(require("path"));
 const routes_1 = __importDefault(require("./routes"));
 const carWashServer = (0, express_1.default)(); //carWashServer initialization;
+carWashServer.enable("trust proxy");
+carWashServer.use((0, cookie_parser_1.default)());
 // middlewares  
 carWashServer.use(express_1.default.json());
 carWashServer.use('/uploads', express_1.default.static(path_1.default.join(__dirname, 'public')));
